@@ -28,6 +28,7 @@ import com.bofa.kafka.dataaggregation.doa.PaymentInfo;
 import com.bofa.kafka.dataaggregation.doa.RemittanceInfo;
 import com.bofa.kafka.dataaggregation.doa.TransferInfo;
 import com.bofa.kafka.dataaggregation.serdes.CustomSerdes;
+import com.bofa.kafka.dataaggregation.serdes.PaymentAggregatedInfoSerde;
 
 @Service
 public class KafkaStreamDataService {
@@ -65,13 +66,13 @@ public class KafkaStreamDataService {
 
 		try {
 			final Properties streamsConfiguration = new Properties();
-			streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, userGroupId);
+			streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "PaymentServiceApplication");
 			streamsConfiguration.put(StreamsConfig.CLIENT_ID_CONFIG, userGroupId);
 			streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 			// Set the default key serde
 			streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 			// Set the default value serde
-			streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, PaymentAggregatedInfo.class);
+			streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, PaymentAggregatedInfoSerde.class);
 			streamsConfiguration.put(StreamsConfig.APPLICATION_SERVER_CONFIG, bootstrapServers);
 			final File example = Files.createTempDirectory("TestParentChildTopic_3").toFile();
 			streamsConfiguration.put(StreamsConfig.STATE_DIR_CONFIG, example.getPath());
@@ -81,6 +82,7 @@ public class KafkaStreamDataService {
 
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 				try {
+					logger.info("Shutdown Triggered ...........................");
 					streams.close();
 				} catch (final Exception e) {
 					// ignored
@@ -95,6 +97,7 @@ public class KafkaStreamDataService {
 
 	KafkaStreams createStreams(final Properties streamsConfiguration) {
 
+		logger.info("Stream initiation........................");
 		final Serde<String> stringSerde = Serdes.String();
 		final StreamsBuilder builder = new StreamsBuilder();
 
@@ -117,6 +120,8 @@ public class KafkaStreamDataService {
 		final KTable<String, PaymentAggregatedInfo> fullPaymentDetails2 = fullPaymentDetails.mapValues(mapper);
 
 		fullPaymentDetails2.toStream().to(aggregatedInfoTopic);
+		
+		logger.info("Stream initiated Done ........................");
 
 		return new KafkaStreams(builder.build(), streamsConfiguration);
 
