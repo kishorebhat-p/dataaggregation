@@ -33,6 +33,12 @@ public class TransferInfo {
 	public void setToAccountID(String toAccountID) {
 		this.toAccountID = toAccountID;
 	}
+
+	@Override
+	public String toString() {
+		return "TransferInfo [transferId=" + transferId + ", fromAccountID=" + fromAccountID + ", toAccountID="
+				+ toAccountID + "]";
+	}
 	
 	
 

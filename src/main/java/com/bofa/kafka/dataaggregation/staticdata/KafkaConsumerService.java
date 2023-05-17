@@ -20,15 +20,17 @@ public class KafkaConsumerService {
 
 	@KafkaListener(topics = "${kafka.topic.creditor}", groupId = "${spring.kafka.consumer.group-id}", containerFactory = "creditorKafkaListenerContainerFactory")
 	public void consume(CreditorInfo message) {
-		logger.info(String.format("CreditorInfo recieved -> %s", message));
-		jdbcTemplate.execute("INSERT INTO CreditorInfo VALUES ('" + message.getAccountID() + "," + "'"
-				+ message.getFirstName() + "'," + "'" + message.getLastName() + "'" + "')");
+		String insertStatemnt = "INSERT INTO CreditorInfo VALUES ('" + message.getAccountID() + "'," + "'"
+				+ message.getFirstName() + "'," + "'" + message.getLastName() + "'" + ")";
+		logger.info(String.format("CreditorInfo recieved -> %s", insertStatemnt));
+		jdbcTemplate.execute(insertStatemnt);
 	}
 
 	@KafkaListener(topics = "${kafka.topic.debitor}", groupId = "${spring.kafka.consumer.group-id}", containerFactory = "debitorKafkaListenerContainerFactory")
 	public void consume(DebitorInfo message) {
-		logger.info(String.format("DebitorInfo created -> %s", message));
-		jdbcTemplate.execute("INSERT INTO DebitorInfo VALUES ('" + message.getAccountID() + "," + "'"
-				+ message.getFirstName() + "'," + "'" + message.getLastName() + "'" + "')");
+		String insertStatemnt = "INSERT INTO DebitorInfo VALUES ('" + message.getAccountID() + "'," + "'"
+				+ message.getFirstName() + "'," + "'" + message.getLastName() + "'" + ")";
+		logger.info(String.format("DebitorInfo created -> %s", insertStatemnt));
+		jdbcTemplate.execute(insertStatemnt);
 	}
 }

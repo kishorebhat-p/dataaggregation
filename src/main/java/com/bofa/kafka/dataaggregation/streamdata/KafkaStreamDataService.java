@@ -75,6 +75,18 @@ public class KafkaStreamDataService {
 			streamsConfiguration.put(StreamsConfig.APPLICATION_SERVER_CONFIG, bootstrapServers);
 			final File example = Files.createTempDirectory("TestParentChildTopic_3").toFile();
 			streamsConfiguration.put(StreamsConfig.STATE_DIR_CONFIG, example.getPath());
+			KafkaStreams streams = createStreams(streamsConfiguration);
+			streams.cleanUp();
+			streams.start();
+
+			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+				try {
+					streams.close();
+				} catch (final Exception e) {
+					// ignored
+				}
+			}));
+
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

@@ -44,6 +44,12 @@ public class PaymentInfo {
 	public void setEventType(String eventType) {
 		this.eventType = eventType;
 	}
+
+	@Override
+	public String toString() {
+		return "PaymentInfo [paymentIdentifer=" + paymentIdentifer + ", eventIdentifier=" + eventIdentifier
+				+ ", eventChannelCode=" + eventChannelCode + ", eventType=" + eventType + "]";
+	}
 	
 	
 }

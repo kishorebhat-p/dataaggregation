@@ -52,4 +52,10 @@ public class PaymentAggregatedInfo {
 		this.transferInfo = transferInfo;
 	}
 
+	@Override
+	public String toString() {
+		return "PaymentAggregatedInfo [creditorInfo=" + creditorInfo + ", debitorInfo=" + debitorInfo + ", paymentInfo="
+				+ paymentInfo + ", remittanceInfo=" + remittanceInfo + ", transferInfo=" + transferInfo + "]";
+	}
+
 }

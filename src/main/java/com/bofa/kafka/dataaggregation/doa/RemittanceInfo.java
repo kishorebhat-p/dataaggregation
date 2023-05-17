@@ -21,6 +21,11 @@ public class RemittanceInfo {
 	public void setRemittanceInfo(String remittanceInfo) {
 		this.remittanceInfo = remittanceInfo;
 	}
+
+	@Override
+	public String toString() {
+		return "RemittanceInfo [transferId=" + transferId + ", remittanceInfo=" + remittanceInfo + "]";
+	}
 	
 	
 }
